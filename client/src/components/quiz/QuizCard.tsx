@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "wouter";
 import { ArrowRight, BookOpen, Clock } from "lucide-react";
 import { motion } from "framer-motion";
