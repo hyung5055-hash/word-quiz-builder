@@ -19,19 +19,21 @@ export default function MatchDeFr() {
   const [wrongCount, setWrongCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetch("/api/match/de/fr")
-      .then((res) => res.json())
-      .then((data: Pair[]) => {
-        setPairs(data);
-        setOriginalPairs(data);
 
-        setDeWords(data.map((p) => p.from));
-        setFrWords(data.map((p) => p.to).sort(() => 0.5 - Math.random()));
+useEffect(() => {
+  fetch("/api/match")
+    .then((res) => res.json())
+    .then((data: Pair[]) => {
+      setPairs(data);
+      setOriginalPairs(data);
 
-        setLoading(false);
-      });
-  }, []);
+      setDeWords(data.map((p) => p.from));
+      setFrWords(data.map((p) => p.to).sort(() => 0.5 - Math.random()));
+
+      setLoading(false);
+    });
+}, []);
+
 
   useEffect(() => {
     if (selectedDe && selectedFr) {
