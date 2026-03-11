@@ -1,3 +1,4 @@
+import React from "react";
 import { Switch, Route } from "wouter";
 import Login from "./pages/Login";
 import MatchDeFr from "./pages/MatchDeFr";
