@@ -1,3 +1,4 @@
+import React from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { useQuizzes } from "@/hooks/use-quizzes";
 import { Loader2 } from "lucide-react";
