@@ -10,8 +10,8 @@ export default function handler(req, res) {
   const selected = shuffled.slice(0, 10);
 
   const triples = selected.map((w) => ({
+    fr: w.fr, 
     de: w.de,
-    fr: w.fr,
     it: w.it,
   }));
 
