@@ -172,6 +172,8 @@ useEffect(() => {
                   margin: "4px 0",
                   cursor: "pointer",
                   borderRadius: "8px",
+                  userSelect: "none",
+                  WebkitUserSelect: "none",
                   background: matched.includes(word)
                     ? "#b6f5c2"
                     : wrong.includes(word)
@@ -211,6 +213,8 @@ useEffect(() => {
                   margin: "4px 0",
                   cursor: "pointer",
                   borderRadius: "8px",
+                  userSelect: "none",
+                  WebkitUserSelect: "none",            
                   background:
                     matched.includes(word)
                       ? "#b6f5c2"
