@@ -40,8 +40,7 @@ useEffect(() => {
       const correct = pairs.find((p) => p.from === selectedDe);
 
       if (correct?.to === selectedFr) {
-        setMatched((prev) => [...prev, selectedDe]);
-
+        setMatched((prev) => [...prev, selectedDe, selectedFr]);
         setTimeout(() => {
           setDeWords((prev) => prev.filter((w) => w !== selectedDe));
           setFrWords((prev) => prev.filter((w) => w !== selectedFr));
