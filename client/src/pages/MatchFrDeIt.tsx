@@ -83,7 +83,7 @@ export default function MatchFrDeIt() {
   const grade = wrongCount <= 2 ? "A" : wrongCount <= 5 ? "B" : "C";
 
   return (
-    <div style={{ padding: "40px" }}>
+    <div style={{ padding: "16px" }}>
       <h1>FR - DE - IT Match</h1>
       <p>📌 Remaining: {frWords.length}</p>
 
@@ -102,7 +102,7 @@ export default function MatchFrDeIt() {
       )}
 
       {!isCompleted && (
-        <div style={{ display: "flex", gap: "40px", marginTop: "30px" }}>
+        <div style={{ display: "flex", gap: "12px", marginTop: "30px" }}>
           <div style={{ flex: 1 }}>
             <h3>French</h3>
             {frWords.map((word) => (
@@ -110,8 +110,8 @@ export default function MatchFrDeIt() {
                 key={word}
                 onClick={() => setSelectedFr(word)}
                 style={{
-                  padding: "10px",
-                  margin: "8px 0",
+                  padding: "8px",
+                  margin: "4px 0",
                   cursor: "pointer",
                   borderRadius: "8px",
                   background:
@@ -134,8 +134,8 @@ export default function MatchFrDeIt() {
                 key={word}
                 onClick={() => setSelectedDe(word)}
                 style={{
-                  padding: "10px",
-                  margin: "8px 0",
+                  padding: "8px",
+                  margin: "4px 0",
                   cursor: "pointer",
                   borderRadius: "8px",
                   background:
@@ -158,8 +158,8 @@ export default function MatchFrDeIt() {
                 key={word}
                 onClick={() => setSelectedIt(word)}
                 style={{
-                  padding: "10px",
-                  margin: "8px 0",
+                  padding: "8px",
+                  margin: "4px 0",
                   cursor: "pointer",
                   borderRadius: "8px",
                   background:
