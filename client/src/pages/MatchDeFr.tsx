@@ -147,7 +147,7 @@ useEffect(() => {
       )}
 
       {!isCompleted && (
-        <div style={{ display: "flex", gap: "80px", marginTop: "30px" }}>
+        <div style={{ display: "flex", gap: "8px", marginTop: "30px" }}>
           {/* German */}
           <div style={{ flex: 1 }}>
             <h3>German</h3>
@@ -156,8 +156,8 @@ useEffect(() => {
                 key={word}
                 onClick={() => setSelectedDe(word)}
                 style={{
-                  padding: "12px",
-                  margin: "8px 0",
+                  padding: "8px",
+                  margin: "4px 0",
                   cursor: "pointer",
                   borderRadius: "8px",
                   background: matched.includes(word)
@@ -182,8 +182,8 @@ useEffect(() => {
                 key={word}
                 onClick={() => setSelectedFr(word)}
                 style={{
-                  padding: "12px",
-                  margin: "8px 0",
+                  padding: "8px",
+                  margin: "4px 0",
                   cursor: "pointer",
                   borderRadius: "8px",
                   background: wrong.includes(word)
