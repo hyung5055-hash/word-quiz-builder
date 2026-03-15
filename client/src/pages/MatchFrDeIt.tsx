@@ -104,7 +104,12 @@ export default function MatchFrDeIt() {
       )}
 
       {!isCompleted && (
-        <div style={{ display: "flex", gap: "12px", marginTop: "30px" }}>
+        <div style={{
+          display: "flex",
+          gap: "12px",
+          marginTop: "30px",
+          marginLeft: "-8px"
+        }}>
           <div style={{ flex: 1 }}>
             <h3>French</h3>
             {frWords.map((word) => (
