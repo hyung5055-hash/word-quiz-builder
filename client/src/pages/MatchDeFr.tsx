@@ -76,7 +76,7 @@ useEffect(() => {
   const grade = wrongCount <= 2 ? "A" : wrongCount <= 5 ? "B" : "C";
 
   return (
-    <div style={{ padding: "40px" }}>
+    <div style={{ padding: "8px" }}>
       <h1>DE - FR Match</h1>
       <p>📌 Remaining: {deWords.length}</p>
 
