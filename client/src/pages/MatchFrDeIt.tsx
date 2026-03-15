@@ -102,6 +102,44 @@ export default function MatchFrDeIt() {
           ))}
         </div>
       )}
+      <button
+        onClick={() => window.location.reload()}
+        style={{
+          marginTop: "20px",
+          padding: "8px 16px",
+          cursor: "pointer",
+        }}
+      >
+        🔄 Play Again
+      </button>
+{wrongTriples.length > 0 && (
+  <button
+    onClick={() => {
+      setPairs(wrongTriples);
+      setFrWords(wrongTriples.map((p) => p.fr));
+      setDeWords(
+        wrongTriples.map((p) => p.de).sort(() => 0.5 - Math.random())
+      );
+      setItWords(
+        wrongTriples.map((p) => p.it).sort(() => 0.5 - Math.random())
+      );
+
+      setMatched([]);
+      setWrong([]);
+      setCorrect([]);
+      setWrongCount(0);
+      setWrongTriples([]);
+    }}
+    style={{
+      marginLeft: "10px",
+      marginTop: "20px",
+      padding: "8px 16px",
+      cursor: "pointer",
+    }}
+  >
+    🔁 Retry Wrong Words
+  </button>
+)}
 
       {!isCompleted && (
         <div style={{
