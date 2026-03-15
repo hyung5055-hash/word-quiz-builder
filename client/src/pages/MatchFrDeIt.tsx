@@ -176,6 +176,34 @@ export default function MatchFrDeIt() {
           </div>
         </div>
       )}
+
+<div style={{ marginTop: "40px", textAlign: "center" }}>
+  <button
+    onClick={() => {
+      const text = selectedFr || selectedDe || selectedIt;
+
+      if (text) {
+        window.open(
+          `https://translate.google.com/?sl=auto&tl=ko&text=${encodeURIComponent(text)}&op=translate`,
+          "_blank"
+        );
+      } else {
+        alert("먼저 단어를 선택하세요.");
+      }
+    }}
+    style={{
+      padding: "10px 24px",
+      cursor: "pointer",
+      borderRadius: "8px",
+      border: "none",
+      background: "#4caf50",
+      color: "white",
+      fontSize: "16px",
+    }}
+  >
+    🌍 Translate to Korean
+  </button>
+</div>
     </div>
   );
 }
