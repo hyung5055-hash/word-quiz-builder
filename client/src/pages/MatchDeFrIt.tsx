@@ -21,7 +21,7 @@ export default function MatchDeFr() {
 
 
 useEffect(() => {
-  fetch("/api/match")
+  fetch("/api/matchdefrit")  
     .then((res) => res.json())
     .then((data: Pair[]) => {
       setPairs(data);
