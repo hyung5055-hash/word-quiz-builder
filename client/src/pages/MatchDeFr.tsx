@@ -156,10 +156,8 @@ useEffect(() => {
                 onClick={() => setSelectedDe(word)}
                 onTouchStart={() => {
                   const timer = setTimeout(() => {
-                    window.open(
-                      `https://wa.me/?text=${encodeURIComponent(word)}`,
-                      "_blank"
-                    );
+                  window.location.href =
+                    `https://wa.me/?text=${encodeURIComponent(word)}`; 
                   }, 800);
                   setPressTimer(timer);
                 }}
@@ -174,6 +172,7 @@ useEffect(() => {
                   borderRadius: "8px",
                   userSelect: "none",
                   WebkitUserSelect: "none",
+                  WebkitTouchCallout: "none",
                   background: matched.includes(word)
                     ? "#b6f5c2"
                     : wrong.includes(word)
@@ -197,10 +196,8 @@ useEffect(() => {
                 onClick={() => setSelectedFr(word)}
                 onTouchStart={() => {
                   const timer = setTimeout(() => {
-                    window.open(
-                      `https://wa.me/?text=${encodeURIComponent(word)}`,
-                      "_blank"
-                    );
+                    window.location.href =
+                      `https://wa.me/?text=${encodeURIComponent(word)}`;
                   }, 800);
                   setPressTimer(timer);
                 }}
@@ -215,6 +212,7 @@ useEffect(() => {
                   borderRadius: "8px",
                   userSelect: "none",
                   WebkitUserSelect: "none",            
+                  WebkitTouchCallout: "none",
                   background:
                     matched.includes(word)
                       ? "#b6f5c2"
