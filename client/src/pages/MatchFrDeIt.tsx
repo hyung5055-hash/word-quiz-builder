@@ -21,6 +21,7 @@ export default function MatchFrDeIt() {
 
   const [matched, setMatched] = useState<string[]>([]);
   const [wrong, setWrong] = useState<string[]>([]);
+  const [correct, setCorrect] = useState<string[]>([]);
   const [wrongTriples, setWrongTriples] = useState<Triple[]>([]);
   const [wrongCount, setWrongCount] = useState(0);
 
@@ -47,11 +48,12 @@ export default function MatchFrDeIt() {
 
       if (correct?.de === selectedDe && correct?.it === selectedIt) {
         setMatched((prev) => [...prev, selectedFr]);
-
+        setCorrect([selectedFr, selectedDe, selectedIt]);
         setTimeout(() => {
           setFrWords((prev) => prev.filter((w) => w !== selectedFr));
           setDeWords((prev) => prev.filter((w) => w !== selectedDe));
           setItWords((prev) => prev.filter((w) => w !== selectedIt));
+          setCorrect([]);    
         }, 800);
       } else {
         setWrong([selectedFr, selectedDe, selectedIt]);
@@ -114,12 +116,14 @@ export default function MatchFrDeIt() {
                   margin: "4px 0",
                   cursor: "pointer",
                   borderRadius: "8px",
-                  background:
-                    wrong.includes(word)
-                      ? "#ffb3b3"
-                      : selectedFr === word
-                      ? "#ddd"
-                      : "#f5f5f5",
+                 background:
+                correct.includes(word)
+                  ? "#b8f5b8"
+                  : wrong.includes(word)
+                  ? "#ffb3b3"
+                  : selectedFr === word
+                  ? "#ddd"
+                  : "#f5f5f5",
                 }}
               >
                 {word}
@@ -139,11 +143,14 @@ export default function MatchFrDeIt() {
                   cursor: "pointer",
                   borderRadius: "8px",
                   background:
-                    wrong.includes(word)
+                    correct.includes(word)
+                      ? "#b8f5b8"
+                      : wrong.includes(word)
                       ? "#ffb3b3"
-                      : selectedDe === word
+                      : selectedFr === word
                       ? "#ddd"
                       : "#f5f5f5",
+                  
                 }}
               >
                 {word}
@@ -161,13 +168,16 @@ export default function MatchFrDeIt() {
                   padding: "8px",
                   margin: "4px 0",
                   cursor: "pointer",
-                  borderRadius: "8px",
+                  borderRadius: "8px",               
                   background:
-                    wrong.includes(word)
+                    correct.includes(word)
+                      ? "#b8f5b8"
+                      : wrong.includes(word)
                       ? "#ffb3b3"
-                      : selectedIt === word
+                      : selectedFr === word
                       ? "#ddd"
                       : "#f5f5f5",
+                  
                 }}
               >
                 {word}
