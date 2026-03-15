@@ -156,8 +156,11 @@ useEffect(() => {
                 onClick={() => setSelectedDe(word)}
                 onTouchStart={() => {
                   const timer = setTimeout(() => {
-                  window.location.href =
-                    `https://wa.me/?text=${encodeURIComponent(word)}`; 
+                    if (navigator.share) {
+                      navigator.share({
+                        text: word,
+                      });
+                    }
                   }, 800);
                   setPressTimer(timer);
                 }}
