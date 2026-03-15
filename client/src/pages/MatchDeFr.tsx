@@ -185,11 +185,15 @@ useEffect(() => {
                   margin: "4px 0",
                   cursor: "pointer",
                   borderRadius: "8px",
-                  background: wrong.includes(word)
-                    ? "#ffb3b3"
-                    : selectedFr === word
+                  background:
+                    matched.includes(word)
+                      ? "#b6f5c2"
+                      : wrong.includes(word)
+                      ? "#ffb3b3"
+                      : selectedFr === word
                       ? "#ddd"
                       : "#f5f5f5",
+
                 }}
               >
                 {word}
