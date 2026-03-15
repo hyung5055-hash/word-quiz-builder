@@ -2,7 +2,7 @@ import React from "react";
 import { Switch, Route } from "wouter";
 import Login from "./pages/Login";
 import MatchDeFr from "./pages/MatchDeFr";
-import MatchDeFrIt from "@/pages/MatchDeFrIt";
+import MatchDeFrIt from "@/pages/MatchFrDeIt";
 
 function App() {
   return (
@@ -10,7 +10,7 @@ function App() {
       <Route path="/" component={Login} />
       <Route path="/login" component={Login} />
       <Route path="/match" component={MatchDeFr} />
-      <Route path="/matchdefrit" component={MatchDeFrIt} />
+      <Route path="/matchdefrit" component={MatchFrDeIt} />
       
     </Switch>
   );
