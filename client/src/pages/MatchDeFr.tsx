@@ -18,8 +18,8 @@ export default function MatchDeFr() {
   const [wrongPairs, setWrongPairs] = useState<Pair[]>([]);
   const [wrongCount, setWrongCount] = useState(0);
   const [loading, setLoading] = useState(true);
-
-
+  const [pressTimer, setPressTimer] = useState<NodeJS.Timeout | null>(null);
+  
 useEffect(() => {
   fetch("/api/match")
     .then((res) => res.json())
@@ -154,6 +154,19 @@ useEffect(() => {
               <div
                 key={word}
                 onClick={() => setSelectedDe(word)}
+                onTouchStart={() => {
+                  const timer = setTimeout(() => {
+                    window.open(
+                      `https://wa.me/?text=${encodeURIComponent(word)}`,
+                      "_blank"
+                    );
+                  }, 800);
+                  setPressTimer(timer);
+                }}
+                onTouchEnd={() => {
+                  if (pressTimer) clearTimeout(pressTimer);
+                }}
+                
                 style={{
                   padding: "8px",
                   margin: "4px 0",
@@ -180,6 +193,19 @@ useEffect(() => {
               <div
                 key={word}
                 onClick={() => setSelectedFr(word)}
+                onTouchStart={() => {
+                  const timer = setTimeout(() => {
+                    window.open(
+                      `https://wa.me/?text=${encodeURIComponent(word)}`,
+                      "_blank"
+                    );
+                  }, 800);
+                  setPressTimer(timer);
+                }}
+                onTouchEnd={() => {
+                  if (pressTimer) clearTimeout(pressTimer);
+                }}
+                
                 style={{
                   padding: "8px",
                   margin: "4px 0",
