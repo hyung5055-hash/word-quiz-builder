@@ -27,6 +27,10 @@ export default function MatchFrDeIt() {
 
   const [loading, setLoading] = useState(true);
 
+  const [search, setSearch] = useState("");
+  const [searchResults, setSearchResults] = useState<Triple[]>([]);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+
   useEffect(() => {
     fetch("/api/matchfrdeit")
       .then((res) => res.json())
@@ -42,27 +46,50 @@ export default function MatchFrDeIt() {
       });
   }, []);
 
+  const handleSearch = (value: string) => {
+    setSearch(value);
+
+    const keyword = value.toLowerCase();
+
+    const results = originalPairs.filter(
+      (p) =>
+        p.fr.toLowerCase().includes(keyword) ||
+        p.de.toLowerCase().includes(keyword) ||
+        p.it.toLowerCase().includes(keyword)
+    );
+
+    setSearchResults(results);
+
+    const suggest = originalPairs
+      .flatMap((p) => [p.fr, p.de, p.it])
+      .filter((word) => word.toLowerCase().includes(keyword))
+      .slice(0, 5);
+
+    setSuggestions(suggest);
+  };
+
   useEffect(() => {
     if (selectedFr && selectedDe && selectedIt) {
-      const correct = pairs.find((p) => p.fr === selectedFr);
+      const correctPair = pairs.find((p) => p.fr === selectedFr);
 
-      if (correct?.de === selectedDe && correct?.it === selectedIt) {
+      if (correctPair?.de === selectedDe && correctPair?.it === selectedIt) {
         setMatched((prev) => [...prev, selectedFr]);
         setCorrect([selectedFr, selectedDe, selectedIt]);
+
         setTimeout(() => {
           setFrWords((prev) => prev.filter((w) => w !== selectedFr));
           setDeWords((prev) => prev.filter((w) => w !== selectedDe));
           setItWords((prev) => prev.filter((w) => w !== selectedIt));
-          setCorrect([]);    
+          setCorrect([]);
         }, 800);
       } else {
         setWrong([selectedFr, selectedDe, selectedIt]);
         setWrongCount((prev) => prev + 1);
 
-        if (correct) {
+        if (correctPair) {
           setWrongTriples((prev) => {
-            if (!prev.find((p) => p.fr === correct.fr)) {
-              return [...prev, correct];
+            if (!prev.find((p) => p.fr === correctPair.fr)) {
+              return [...prev, correctPair];
             }
             return prev;
           });
@@ -87,67 +114,79 @@ export default function MatchFrDeIt() {
   return (
     <div style={{ padding: "16px" }}>
       <h1>FR - DE - IT Match</h1>
+
+  <div style={{ marginTop: "20px", marginBottom: "20px" }}>
+  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+    <span style={{ fontSize: "20px" }}>🔍</span>
+
+    <input
+      type="text"
+      placeholder="Search word..."
+      value={search}
+      onChange={(e) => handleSearch(e.target.value)}
+      style={{
+        padding: "8px",
+        width: "250px",
+        borderRadius: "8px",
+        border: "1px solid #ccc",
+      }}
+    />
+  </div>
+
+  {suggestions.length > 0 && search && (
+    <div
+      style={{
+        marginTop: "8px",
+        background: "#fff",
+        border: "1px solid #ddd",
+        borderRadius: "8px",
+      }}
+    >
+      {suggestions.map((word, index) => (
+        <div
+          key={index}
+          onClick={() => handleSearch(word)}
+          style={{
+            padding: "8px",
+            cursor: "pointer",
+            borderBottom: "1px solid #eee",
+          }}
+        >
+          {word}
+        </div>
+      ))}
+    </div>
+  )}
+
+  {search && (
+    <div style={{ marginTop: "12px" }}>
+      {searchResults.map((item, index) => (
+        <div
+          key={index}
+          style={{
+            padding: "8px",
+            marginBottom: "6px",
+            background: "#f5f5f5",
+            borderRadius: "8px",
+          }}
+        >
+          {item.fr} — {item.de} — {item.it}
+        </div>
+      ))}
+    </div>
+  )}
+</div>
+
+
+
+
+
+      
+
       <p>📌 Remaining: {frWords.length}</p>
 
-      {isCompleted && (
-        <div style={{ marginTop: "30px" }}>
-          <h2 style={{ color: "green" }}>🎉 All matched!</h2>
-          <p>❌ Wrong Attempts: {wrongCount}</p>
-          <p>🏆 Grade: {grade}</p>
-
-          {originalPairs.map((pair, index) => (
-            <div key={index}>
-              {pair.fr} — {pair.de} — {pair.it}
-            </div>
-          ))}
-        </div>
-      )}
-      <button
-        onClick={() => window.location.reload()}
-        style={{
-          marginTop: "20px",
-          padding: "8px 16px",
-          cursor: "pointer",
-        }}
-      >
-        🔄 Play Again
-      </button>
-{wrongTriples.length > 0 && (
-  <button
-    onClick={() => {
-      setPairs(wrongTriples);
-      setFrWords(wrongTriples.map((p) => p.fr));
-      setDeWords(
-        wrongTriples.map((p) => p.de).sort(() => 0.5 - Math.random())
-      );
-      setItWords(
-        wrongTriples.map((p) => p.it).sort(() => 0.5 - Math.random())
-      );
-
-      setMatched([]);
-      setWrong([]);
-      setCorrect([]);
-      setWrongCount(0);
-      setWrongTriples([]);
-    }}
-    style={{
-      marginLeft: "10px",
-      marginTop: "20px",
-      padding: "8px 16px",
-      cursor: "pointer",
-    }}
-  >
-    🔁 Retry Wrong Words
-  </button>
-)}
-
       {!isCompleted && (
-        <div style={{
-          display: "flex",
-          gap: "12px",
-          marginTop: "30px",
-          marginLeft: "-8px"
-        }}>
+        <div style={{ display: "flex", gap: "12px", marginTop: "30px" }}>
           <div style={{ flex: 1 }}>
             <h3>French</h3>
             {frWords.map((word) => (
@@ -159,14 +198,14 @@ export default function MatchFrDeIt() {
                   margin: "4px 0",
                   cursor: "pointer",
                   borderRadius: "8px",
-                 background:
-                correct.includes(word)
-                  ? "#b8f5b8"
-                  : wrong.includes(word)
-                  ? "#ffb3b3"
-                  : selectedFr === word
-                  ? "#ddd"
-                  : "#f5f5f5",
+                  background:
+                    correct.includes(word)
+                      ? "#b8f5b8"
+                      : wrong.includes(word)
+                      ? "#ffb3b3"
+                      : selectedFr === word
+                      ? "#ddd"
+                      : "#f5f5f5",
                 }}
               >
                 {word}
@@ -190,10 +229,9 @@ export default function MatchFrDeIt() {
                       ? "#b8f5b8"
                       : wrong.includes(word)
                       ? "#ffb3b3"
-                      : selectedFr === word
+                      : selectedDe === word
                       ? "#ddd"
                       : "#f5f5f5",
-                  
                 }}
               >
                 {word}
@@ -211,16 +249,15 @@ export default function MatchFrDeIt() {
                   padding: "8px",
                   margin: "4px 0",
                   cursor: "pointer",
-                  borderRadius: "8px",               
+                  borderRadius: "8px",
                   background:
                     correct.includes(word)
                       ? "#b8f5b8"
                       : wrong.includes(word)
                       ? "#ffb3b3"
-                      : selectedFr === word
+                      : selectedIt === word
                       ? "#ddd"
                       : "#f5f5f5",
-                  
                 }}
               >
                 {word}
@@ -229,7 +266,6 @@ export default function MatchFrDeIt() {
           </div>
         </div>
       )}
-
 <div style={{ marginTop: "40px", textAlign: "center" }}>
   <button
     onClick={() => {
