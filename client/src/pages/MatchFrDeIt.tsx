@@ -115,75 +115,102 @@ export default function MatchFrDeIt() {
     <div style={{ padding: "16px" }}>
       <h1>FR - DE - IT Match</h1>
 
-  <div style={{ marginTop: "20px", marginBottom: "20px" }}>
-  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-    <span style={{ fontSize: "20px" }}>🔍</span>
+      <div
+        style={{
+          marginTop: "20px",
+          marginBottom: "20px",
+          background: "white",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <span style={{ fontSize: "20px" }}>🔍</span>
 
-    <input
-      type="text"
-      placeholder="Search word..."
-      value={search}
-      onChange={(e) => handleSearch(e.target.value)}
-      style={{
-        padding: "8px",
-        width: "250px",
-        borderRadius: "8px",
-        border: "1px solid #ccc",
-      }}
-    />
-  </div>
-
-  {suggestions.length > 0 && search && (
-    <div
-      style={{
-        marginTop: "8px",
-        background: "#fff",
-        border: "1px solid #ddd",
-        borderRadius: "8px",
-      }}
-    >
-      {suggestions.map((word, index) => (
-        <div
-          key={index}
-          onClick={() => handleSearch(word)}
-          style={{
-            padding: "8px",
-            cursor: "pointer",
-            borderBottom: "1px solid #eee",
-          }}
-        >
-          {word}
+          <input
+            type="text"
+            placeholder="Search word..."
+            value={search}
+            onChange={(e) => handleSearch(e.target.value)}
+            style={{
+              padding: "8px",
+              width: "100%",
+              maxWidth: "250px",
+              borderRadius: "8px",
+              border: "1px solid #ccc",
+            }}
+          />
         </div>
-      ))}
-    </div>
-  )}
 
-  {search && (
-    <div style={{ marginTop: "12px" }}>
-      {searchResults.map((item, index) => (
-        <div
-          key={index}
-          style={{
-            padding: "8px",
-            marginBottom: "6px",
-            background: "#f5f5f5",
-            borderRadius: "8px",
-          }}
-        >
-          {item.fr} — {item.de} — {item.it}
-        </div>
-      ))}
-    </div>
-  )}
-</div>
+        {suggestions.length > 0 && search && (
+          <div
+            style={{
+              marginTop: "8px",
+              background: "#fff",
+              border: "1px solid #ddd",
+              borderRadius: "8px",
+              maxHeight: "150px",
+              overflowY: "auto",
+            }}
+          >
+            {suggestions.map((word, index) => (
+              <div
+                key={index}
+                onClick={() => {
+                  handleSearch(word);
+                  setSuggestions([]);
+                }}
+                style={{
+                  padding: "8px",
+                  cursor: "pointer",
+                  borderBottom: "1px solid #eee",
+                }}
+              >
+                {word}
+              </div>
+            ))}
+          </div>
+        )}
 
-
-
-
-
-      
+        {searchResults.length > 0 && (
+          <div
+            style={{
+              marginTop: "12px",
+              background: "#fff",
+              border: "1px solid #ddd",
+              borderRadius: "8px",
+              maxHeight: "220px",
+              overflowY: "auto",
+            }}
+          >
+            {searchResults.map((item, index) => (
+              <div
+                key={index}
+                style={{
+                  padding: "10px",
+                  borderBottom: "1px solid #eee",
+                }}
+              >
+                {item.fr} — {item.de} — {item.it}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
       <p>📌 Remaining: {frWords.length}</p>
+
+      {isCompleted && (
+        <div style={{ marginTop: "30px" }}>
+          <h2 style={{ color: "green" }}>🎉 All matched!</h2>
+          <p>❌ Wrong Attempts: {wrongCount}</p>
+          <p>🏆 Grade: {grade}</p>
+
+          {originalPairs.map((pair, index) => (
+            <div key={index}>
+              {pair.fr} — {pair.de} — {pair.it}
+            </div>
+          ))}
+        </div>
+      )}
 
       {!isCompleted && (
         <div style={{ display: "flex", gap: "12px", marginTop: "30px" }}>
@@ -266,33 +293,36 @@ export default function MatchFrDeIt() {
           </div>
         </div>
       )}
-<div style={{ marginTop: "40px", textAlign: "center" }}>
-  <button
-    onClick={() => {
-      const text = selectedFr || selectedDe || selectedIt;
 
-      if (text) {
-        window.open(
-          `https://translate.google.com/?sl=auto&tl=ko&text=${encodeURIComponent(text)}&op=translate`,
-          "_blank"
-        );
-      } else {
-        alert("먼저 단어를 선택하세요.");
-      }
-    }}
-    style={{
-      padding: "10px 24px",
-      cursor: "pointer",
-      borderRadius: "8px",
-      border: "none",
-      background: "#4caf50",
-      color: "white",
-      fontSize: "16px",
-    }}
-  >
-    🌍 Translate to Korean
-  </button>
-</div>
+      <div style={{ marginTop: "40px", textAlign: "center" }}>
+        <button
+          onClick={() => {
+            const text = selectedFr || selectedDe || selectedIt;
+
+            if (text) {
+              window.open(
+                `https://translate.google.com/?sl=auto&tl=ko&text=${encodeURIComponent(
+                  text
+                )}&op=translate`,
+                "_blank"
+              );
+            } else {
+              alert("먼저 단어를 선택하세요.");
+            }
+          }}
+          style={{
+            padding: "10px 24px",
+            cursor: "pointer",
+            borderRadius: "8px",
+            border: "none",
+            background: "#4caf50",
+            color: "white",
+            fontSize: "16px",
+          }}
+        >
+          🌍 Translate to Korean
+        </button>
+      </div>
     </div>
   );
 }
