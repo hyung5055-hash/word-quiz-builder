@@ -62,7 +62,7 @@ export default function MatchFrDeIt() {
         p.it.toLowerCase().includes(keyword)
     );
 
-console.log(results.find((p) => p.fr === "choisir"));
+console.log(results.find((p) => p.fr === "bonjour"));
 
     
     setSearchResults(results);
