@@ -48,17 +48,18 @@ export default function MatchFrDeIt() {
   const handleSearch = (value: string) => {
     setSearch(value);
 
-    if (!value.trim()) {
+    const keyword = value.toLowerCase().trim();
+
+    if (!keyword) {
       setSearchResults([]);
       return;
     }
 
-    const keyword = value.toLowerCase().trim();
-
-    const results = originalPairs.filter((p) =>
-      p.fr.toLowerCase().includes(keyword) ||
-      p.de.toLowerCase().includes(keyword) ||
-      p.it.toLowerCase().includes(keyword)
+    const results = originalPairs.filter(
+      (p) =>
+        p.fr.toLowerCase().includes(keyword) ||
+        p.de.toLowerCase().includes(keyword) ||
+        p.it.toLowerCase().includes(keyword)
     );
 
     setSearchResults(results);
@@ -119,7 +120,9 @@ export default function MatchFrDeIt() {
             type="text"
             placeholder="Search word..."
             value={search}
-            onChange={(e) => handleSearch(e.target.value)}
+            onInput={(e) =>
+              handleSearch((e.target as HTMLInputElement).value)
+            }
             style={{
               padding: "8px",
               width: "100%",
@@ -161,20 +164,6 @@ export default function MatchFrDeIt() {
       </div>
 
       <p>📌 Remaining: {frWords.length}</p>
-
-      {isCompleted && (
-        <div style={{ marginTop: "30px" }}>
-          <h2 style={{ color: "green" }}>🎉 All matched!</h2>
-          <p>❌ Wrong Attempts: {wrongCount}</p>
-          <p>🏆 Grade: {grade}</p>
-
-          {originalPairs.map((pair, index) => (
-            <div key={index}>
-              {pair.fr} — {pair.de} — {pair.it}
-            </div>
-          ))}
-        </div>
-      )}
 
       {!isCompleted && (
         <div style={{ display: "flex", gap: "12px", marginTop: "30px" }}>
