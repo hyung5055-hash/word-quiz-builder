@@ -7,7 +7,7 @@ export default function handler(req, res) {
   const words = JSON.parse(raw);
 
   const shuffled = [...words].sort(() => 0.5 - Math.random());
-  const selected = shuffled;
+  const selected = shuffled.slice(0, 10);
   const triples = selected.map((w) => ({
     fr: w.fr, 
     de: w.de,
