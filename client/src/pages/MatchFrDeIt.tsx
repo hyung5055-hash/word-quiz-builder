@@ -29,7 +29,6 @@ export default function MatchFrDeIt() {
 
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState<Triple[]>([]);
-  const [suggestions, setSuggestions] = useState<string[]>([]);
 
   useEffect(() => {
     fetch("/api/matchfrdeit")
@@ -49,23 +48,20 @@ export default function MatchFrDeIt() {
   const handleSearch = (value: string) => {
     setSearch(value);
 
-    const keyword = value.toLowerCase();
+    if (!value.trim()) {
+      setSearchResults([]);
+      return;
+    }
 
-    const results = originalPairs.filter(
-      (p) =>
-        p.fr.toLowerCase().includes(keyword) ||
-        p.de.toLowerCase().includes(keyword) ||
-        p.it.toLowerCase().includes(keyword)
+    const keyword = value.toLowerCase().trim();
+
+    const results = originalPairs.filter((p) =>
+      p.fr.toLowerCase().includes(keyword) ||
+      p.de.toLowerCase().includes(keyword) ||
+      p.it.toLowerCase().includes(keyword)
     );
 
     setSearchResults(results);
-
-    const suggest = originalPairs
-      .flatMap((p) => [p.fr, p.de, p.it])
-      .filter((word) => word.toLowerCase().includes(keyword))
-      .slice(0, 5);
-
-    setSuggestions(suggest);
   };
 
   useEffect(() => {
@@ -115,13 +111,7 @@ export default function MatchFrDeIt() {
     <div style={{ padding: "16px" }}>
       <h1>FR - DE - IT Match</h1>
 
-      <div
-        style={{
-          marginTop: "20px",
-          marginBottom: "20px",
-          background: "white",
-        }}
-      >
+      <div style={{ marginTop: "20px", marginBottom: "20px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <span style={{ fontSize: "20px" }}>🔍</span>
 
@@ -140,37 +130,7 @@ export default function MatchFrDeIt() {
           />
         </div>
 
-        {suggestions.length > 0 && search && (
-          <div
-            style={{
-              marginTop: "8px",
-              background: "#fff",
-              border: "1px solid #ddd",
-              borderRadius: "8px",
-              maxHeight: "150px",
-              overflowY: "auto",
-            }}
-          >
-            {suggestions.map((word, index) => (
-              <div
-                key={index}
-                onClick={() => {
-                  handleSearch(word);
-                  setSuggestions([]);
-                }}
-                style={{
-                  padding: "8px",
-                  cursor: "pointer",
-                  borderBottom: "1px solid #eee",
-                }}
-              >
-                {word}
-              </div>
-            ))}
-          </div>
-        )}
-
-        {searchResults.length > 0 && (
+        {search.length > 0 && (
           <div
             style={{
               marginTop: "12px",
@@ -181,17 +141,21 @@ export default function MatchFrDeIt() {
               overflowY: "auto",
             }}
           >
-            {searchResults.map((item, index) => (
-              <div
-                key={index}
-                style={{
-                  padding: "10px",
-                  borderBottom: "1px solid #eee",
-                }}
-              >
-                {item.fr} — {item.de} — {item.it}
-              </div>
-            ))}
+            {searchResults.length > 0 ? (
+              searchResults.map((item, index) => (
+                <div
+                  key={index}
+                  style={{
+                    padding: "10px",
+                    borderBottom: "1px solid #eee",
+                  }}
+                >
+                  {item.fr} — {item.de} — {item.it}
+                </div>
+              ))
+            ) : (
+              <div style={{ padding: "10px" }}>No result</div>
+            )}
           </div>
         )}
       </div>
@@ -301,9 +265,7 @@ export default function MatchFrDeIt() {
 
             if (text) {
               window.open(
-                `https://translate.google.com/?sl=auto&tl=ko&text=${encodeURIComponent(
-                  text
-                )}&op=translate`,
+                `https://translate.google.com/?sl=auto&tl=ko&text=${encodeURIComponent(text)}&op=translate`,
                 "_blank"
               );
             } else {
