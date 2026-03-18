@@ -35,13 +35,19 @@ export default function MatchFrDeIt() {
       .then((res) => res.json())
       .then((data: Triple[]) => {
         setPairs(data);
-        setOriginalPairs(data);
-
         setFrWords(data.map((p) => p.fr));
         setDeWords(data.map((p) => p.de).sort(() => 0.5 - Math.random()));
         setItWords(data.map((p) => p.it).sort(() => 0.5 - Math.random()));
 
         setLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/allwords")
+      .then((res) => res.json())
+      .then((data: Triple[]) => {
+        setOriginalPairs(data);
       });
   }, []);
 
