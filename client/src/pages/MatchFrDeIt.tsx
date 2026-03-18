@@ -118,7 +118,7 @@ console.log(results.find((p) => p.fr === "bonjour"));
   const grade = wrongCount <= 2 ? "A" : wrongCount <= 5 ? "B" : "C";
 
   return (
-    <div style={{ padding: "16px" }}>
+    <div style={{ padding: "6px" }}>
       <h1>FR - DE - IT Match</h1>
 
       <div style={{ marginTop: "20px", marginBottom: "20px" }}>
@@ -175,7 +175,7 @@ console.log(results.find((p) => p.fr === "bonjour"));
       <p>📌 Remaining: {frWords.length}</p>
 
       {!isCompleted && (
-        <div style={{ display: "flex", gap: "12px", marginTop: "30px" }}>
+        <div style={{ display: "flex", gap: "6px", marginTop: "20px" }}>
           <div style={{ flex: 1 }}>
             <h3>French</h3>
             {frWords.map((word) => (
