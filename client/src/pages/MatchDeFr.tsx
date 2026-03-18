@@ -19,7 +19,10 @@ export default function MatchDeFr() {
   const [wrongCount, setWrongCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [pressTimer, setPressTimer] = useState<NodeJS.Timeout | null>(null);
-  
+  const [search, setSearch] = useState("");
+  const [searchResults, setSearchResults] = useState<Pair[]>([]);
+  const [originalPairs, setOriginalPairs] = useState<Pair[]>([]);
+
 useEffect(() => {
   fetch("/api/match")
     .then((res) => res.json())
@@ -34,6 +37,18 @@ useEffect(() => {
     });
 }, []);
 
+useEffect(() => {
+  fetch("/api/allwords")
+    .then((res) => res.json())
+    .then((data: Pair[]) => {
+      setOriginalPairs(
+        data.map((w) => ({
+          from: w.fr,
+          to: w.de,
+        }))
+      );
+    });
+}, []);
 
   useEffect(() => {
     if (selectedDe && selectedFr) {
@@ -69,14 +84,61 @@ useEffect(() => {
   }, [selectedDe, selectedFr, pairs]);
 
   if (loading) return <div style={{ padding: 40 }}>Loading...</div>;
-
   const isCompleted = deWords.length === 0;
-
   const grade = wrongCount <= 2 ? "A" : wrongCount <= 5 ? "B" : "C";
+  const handleSearch = (value: string) => {
+  setSearch(value);
 
+  const keyword = value.toLowerCase().trim();
+  if (!keyword) {
+    setSearchResults([]);
+    return;
+  }
+
+  const results = originalPairs.filter(
+    (p) =>
+      p.from.toLowerCase().includes(keyword) ||
+      p.to.toLowerCase().includes(keyword)
+  );
+
+  setSearchResults(results);
+};
+  
   return (
     <div style={{ padding: "8px" }}>
       <h1>DE - FR Match</h1>
+
+<div style={{ marginTop: "20px", marginBottom: "20px" }}>
+  <input
+    type="text"
+    placeholder="Search word..."
+    value={search}
+    onInput={(e) =>
+      handleSearch((e.target as HTMLInputElement).value)
+    }
+    style={{
+      padding: "8px",
+      width: "250px",
+      borderRadius: "8px",
+      border: "1px solid #ccc",
+    }}
+  />
+
+  {search.length > 0 && (
+    <div style={{
+      marginTop: "10px",
+      border: "1px solid #ddd",
+      borderRadius: "8px"
+    }}>
+      {searchResults.map((item, index) => (
+        <div key={index} style={{ padding: "8px" }}>
+          {item.from} — {item.to}
+        </div>
+      ))}
+    </div>
+  )}
+</div>
+
       <p>📌 Remaining: {deWords.length}</p>
 
       {isCompleted && (
