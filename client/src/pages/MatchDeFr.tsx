@@ -21,8 +21,7 @@ export default function MatchDeFr() {
   const [pressTimer, setPressTimer] = useState<NodeJS.Timeout | null>(null);
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState<Pair[]>([]);
-  const [originalPairs, setOriginalPairs] = useState<Pair[]>([]);
-
+  
 useEffect(() => {
   fetch("/api/match")
     .then((res) => res.json())
