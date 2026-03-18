@@ -108,32 +108,52 @@ useEffect(() => {
       <h1>DE - FR Match</h1>
 
 <div style={{ marginTop: "20px", marginBottom: "20px" }}>
-  <input
-    type="text"
-    placeholder="Search word..."
-    value={search}
-    onInput={(e) =>
-      handleSearch((e.target as HTMLInputElement).value)
-    }
-    style={{
-      padding: "8px",
-      width: "250px",
-      borderRadius: "8px",
-      border: "1px solid #ccc",
-    }}
-  />
+  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+    <span style={{ fontSize: "20px" }}>🔍</span>
+
+    <input
+      type="text"
+      placeholder="Search word..."
+      value={search}
+      onInput={(e) =>
+        handleSearch((e.target as HTMLInputElement).value)
+      }
+      style={{
+        padding: "8px",
+        width: "100%",
+        maxWidth: "250px",
+        borderRadius: "8px",
+        border: "1px solid #ccc",
+      }}
+    />
+  </div>
 
   {search.length > 0 && (
-    <div style={{
-      marginTop: "10px",
-      border: "1px solid #ddd",
-      borderRadius: "8px"
-    }}>
-      {searchResults.map((item, index) => (
-        <div key={index} style={{ padding: "8px" }}>
-          {item.from} — {item.to}
-        </div>
-      ))}
+    <div
+      style={{
+        marginTop: "12px",
+        background: "#fff",
+        border: "1px solid #ddd",
+        borderRadius: "8px",
+        maxHeight: "220px",
+        overflowY: "auto",
+      }}
+    >
+      {searchResults.length > 0 ? (
+        searchResults.map((item, index) => (
+          <div
+            key={index}
+            style={{
+              padding: "10px",
+              borderBottom: "1px solid #eee",
+            }}
+          >
+            {item.from} — {item.to}
+          </div>
+        ))
+      ) : (
+        <div style={{ padding: "10px" }}>No result</div>
+      )}
     </div>
   )}
 </div>
