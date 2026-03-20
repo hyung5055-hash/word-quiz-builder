@@ -24,25 +24,26 @@ export default function MatchFrDeIt() {
   const [correct, setCorrect] = useState<string[]>([]);
   const [wrongTriples, setWrongTriples] = useState<Triple[]>([]);
   const [wrongCount, setWrongCount] = useState(0);
-
   const [loading, setLoading] = useState(true);
-
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState<Triple[]>([]);
+  const [usedFr, setUsedFr] = useState<string[]>([]);
+  
 
   useEffect(() => {
     fetch("/api/matchfrdeit")
       .then((res) => res.json())
       .then((data: Triple[]) => {
-        setPairs(data);
-        setFrWords(data.map((p) => p.fr));
-        setDeWords(data.map((p) => p.de).sort(() => 0.5 - Math.random()));
-        setItWords(data.map((p) => p.it).sort(() => 0.5 - Math.random()));
-
+        const filtered = data.filter((p) => !usedFr.includes(p.fr));
+      
+        setPairs(filtered);
+        setFrWords(filtered.map((p) => p.fr));
+        setDeWords(filtered.map((p) => p.de).sort(() => 0.5 - Math.random()));
+        setItWords(filtered.map((p) => p.it).sort(() => 0.5 - Math.random()));
+      
         setLoading(false);
       });
-  }, []);
-
+    
   useEffect(() => {
     fetch("/api/allwords")
       .then((res) => res.json())
@@ -80,7 +81,9 @@ console.log(results.find((p) => p.fr === "bonjour"));
 
       if (correctPair?.de === selectedDe && correctPair?.it === selectedIt) {
         setMatched((prev) => [...prev, selectedFr]);
+        setUsedFr((prev) => [...prev, selectedFr]); // ⭐ 추가
         setCorrect([selectedFr, selectedDe, selectedIt]);
+
 
         setTimeout(() => {
           setFrWords((prev) => prev.filter((w) => w !== selectedFr));
@@ -289,20 +292,44 @@ console.log(results.find((p) => p.fr === "bonjour"));
     <p>❌ Wrong Attempts: {wrongCount}</p>
     <p>🏆 Grade: {grade}</p>
 
-    <button
-      onClick={() => window.location.reload()}
-      style={{
-        padding: "10px 20px",
-        marginTop: "10px",
-        borderRadius: "8px",
-        border: "none",
-        background: "#2196f3",
-        color: "white",
-        cursor: "pointer",
-      }}
-    >
-      🔄 Play Again
-    </button>
+<button
+  onClick={() => {
+    const remaining = originalPairs.filter(
+      (p) => !usedFr.includes(p.fr)
+    );
+
+    if (remaining.length === 0) {
+      alert("🎉 모든 문제 완료!");
+      return;
+    }
+
+    setPairs(remaining);
+    setFrWords(remaining.map((p) => p.fr));
+    setDeWords(
+      remaining.map((p) => p.de).sort(() => 0.5 - Math.random())
+    );
+    setItWords(
+      remaining.map((p) => p.it).sort(() => 0.5 - Math.random())
+    );
+
+    setMatched([]);
+    setWrong([]);
+    setCorrect([]);
+    setWrongCount(0);
+    setWrongTriples([]);
+  }}
+  style={{
+    padding: "10px 20px",
+    marginTop: "10px",
+    borderRadius: "8px",
+    border: "none",
+    background: "#2196f3",
+    color: "white",
+    cursor: "pointer",
+  }}
+>
+  🔄 Play Again
+</button>
 
     {wrongTriples.length > 0 && (
       <button
