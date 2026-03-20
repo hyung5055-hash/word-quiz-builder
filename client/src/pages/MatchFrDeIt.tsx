@@ -283,6 +283,63 @@ console.log(results.find((p) => p.fr === "bonjour"));
           🌍 Translate to Korean
         </button>
       </div>
+{isCompleted && (
+  <div style={{ marginTop: "40px", textAlign: "center" }}>
+    <h2 style={{ color: "green" }}>🎉 All matched!</h2>
+    <p>❌ Wrong Attempts: {wrongCount}</p>
+    <p>🏆 Grade: {grade}</p>
+
+    <button
+      onClick={() => window.location.reload()}
+      style={{
+        padding: "10px 20px",
+        marginTop: "10px",
+        borderRadius: "8px",
+        border: "none",
+        background: "#2196f3",
+        color: "white",
+        cursor: "pointer",
+      }}
+    >
+      🔄 Play Again
+    </button>
+
+    {wrongTriples.length > 0 && (
+      <button
+        onClick={() => {
+          setPairs(wrongTriples);
+
+          setFrWords(wrongTriples.map((p) => p.fr));
+          setDeWords(
+            wrongTriples.map((p) => p.de).sort(() => 0.5 - Math.random())
+          );
+          setItWords(
+            wrongTriples.map((p) => p.it).sort(() => 0.5 - Math.random())
+          );
+
+          setMatched([]);
+          setWrong([]);
+          setCorrect([]);
+          setWrongCount(0);
+          setWrongTriples([]);
+        }}
+        style={{
+          padding: "10px 20px",
+          marginTop: "10px",
+          marginLeft: "10px",
+          borderRadius: "8px",
+          border: "none",
+          background: "#ff9800",
+          color: "white",
+          cursor: "pointer",
+        }}
+      >
+        🔁 Retry Wrong Words
+      </button>
+    )}
+  </div>
+)}
+
     </div>
   );
 }
