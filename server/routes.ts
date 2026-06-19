@@ -11,7 +11,6 @@ export async function registerRoutes(
   // JSON 안전 로드
   // =========================
   let words: any[] = [];
-  let words: any[] = [];
   let fr90: any[] = [];
   let de90: any[] = [];
 
