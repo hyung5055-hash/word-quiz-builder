@@ -11,6 +11,9 @@ export async function registerRoutes(
   // JSON 안전 로드
   // =========================
   let words: any[] = [];
+  let words: any[] = [];
+  let fr90: any[] = [];
+  let de90: any[] = [];
 
   try {
     const filePath = path.join(process.cwd(), "server", "data", "words.json");
@@ -21,6 +24,24 @@ export async function registerRoutes(
   } catch (err) {
     console.error("❌ Failed to load words.json:", err);
   }
+
+try {
+  const filePath = path.join(process.cwd(), "server", "data", "fr90.json");
+  fr90 = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+
+  console.log("✅ fr90.json loaded:", fr90.length);
+} catch (err) {
+  console.error("❌ Failed to load fr90.json:", err);
+}
+
+try {
+  const filePath = path.join(process.cwd(), "server", "data", "de90.json");
+  de90 = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+
+  console.log("✅ de90.json loaded:", de90.length);
+} catch (err) {
+  console.error("❌ Failed to load de90.json:", err);
+}
 
   // =========================
   // 퀴즈 목록
@@ -86,6 +107,14 @@ export async function registerRoutes(
 
     res.json(pairs);
   });
+
+  app.get("/api/fr90", (_req, res) => {
+  res.json(fr90);
+});
+
+app.get("/api/de90", (_req, res) => {
+  res.json(de90);
+});
 
   return httpServer;
 }
