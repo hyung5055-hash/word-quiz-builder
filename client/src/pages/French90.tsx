@@ -14,11 +14,13 @@ export default function French90() {
   const [matched, setMatched] = useState<string[]>([]);
   const [wrong, setWrong] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch("/fr90.json")
-      .then((res) => res.json())
-      .then((data) => {
+fetch("/fr90.json")
+  .then((res) => {
+    console.log("status:", res.status);
+    return res.json();
+  })
+  .then((data) => {
+    console.log("data:", data);
         const converted: Pair[] = data.map((w: any) => ({
           from: w.word,
           to: w.meaning,
