@@ -13,6 +13,10 @@ export default function French90() {
   const [selectedRight, setSelectedRight] = useState<string | null>(null);
   const [matched, setMatched] = useState<string[]>([]);
   const [wrong, setWrong] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+
+useEffect(() => {
+  
 useEffect(() => {
   fetch("/api/fr90")
     .then((res) => {
