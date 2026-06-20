@@ -43,7 +43,8 @@ export default function MatchFrDeIt() {
       
         setLoading(false);
       });
-    
+}, [usedFr]);
+
   useEffect(() => {
     fetch("/api/allwords")
       .then((res) => res.json())
