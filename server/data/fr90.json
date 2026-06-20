@@ -29,7 +29,6 @@
   {"word":"néanmoins","meaning":"그럼에도 불구하고","gender":""},
   {"word":"donc","meaning":"그러므로","gender":""},
   {"word":"alors","meaning":"그러면","gender":""},
-
   {"word":"la santé","meaning":"건강","gender":"f"},
   {"word":"le médecin","meaning":"의사","gender":"m"},
   {"word":"l'hôpital","meaning":"병원","gender":"m"},
@@ -59,7 +58,7 @@
   {"word":"sain","meaning":"건강한","gender":""},
   {"word":"actif","meaning":"활동적인","gender":""},
   {"word":"régulier","meaning":"규칙적인","gender":""},
-  {"word":"positif","meaning":"긍정적인","gender":""}
+  {"word":"positif","meaning":"긍정적인","gender":""},
   {"word":"le voyage","meaning":"여행","gender":"m"},
   {"word":"la réservation","meaning":"예약","gender":"f"},
   {"word":"le billet","meaning":"표","gender":"m"},
