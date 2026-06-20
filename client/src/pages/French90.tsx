@@ -13,30 +13,30 @@ export default function French90() {
   const [selectedRight, setSelectedRight] = useState<string | null>(null);
   const [matched, setMatched] = useState<string[]>([]);
   const [wrong, setWrong] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
-fetch("/fr90.json")
-  .then((res) => {
-    console.log("status:", res.status);
-    return res.json();
-  })
-  .then((data) => {
-    console.log("data:", data);
-        const converted: Pair[] = data.map((w: any) => ({
-          from: w.word,
-          to: w.meaning,
-        }));
+useEffect(() => {
+  fetch("/api/fr90")
+    .then((res) => {
+      console.log("status:", res.status);
+      return res.json();
+    })
+    .then((data) => {
+      console.log("data:", data);
 
-        setPairs(converted);
+      const converted: Pair[] = data.map((w: any) => ({
+        from: w.word,
+        to: w.meaning,
+      }));
 
-        setLeftWords(converted.map((p) => p.from));
+      setPairs(converted);
+      setLeftWords(converted.map((p) => p.from));
+      setRightWords(
+        converted.map((p) => p.to).sort(() => 0.5 - Math.random())
+      );
 
-        setRightWords(
-          converted.map((p) => p.to).sort(() => 0.5 - Math.random())
-        );
-
-        setLoading(false);
-      });
-  }, []);
+      setLoading(false);
+    })
+    .catch((err) => console.error(err));
+}, []);
 
   useEffect(() => {
     if (selectedLeft && selectedRight) {
