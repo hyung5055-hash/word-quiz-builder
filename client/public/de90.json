@@ -29,7 +29,6 @@
   {"word":"deshalb","meaning":"그러므로","gender":""},
   {"word":"deswegen","meaning":"그래서","gender":""},
   {"word":"zuerst","meaning":"먼저","gender":""},
-
   {"word":"die Gesundheit","meaning":"건강","gender":"f"},
   {"word":"der Arzt","meaning":"의사","gender":"m"},
   {"word":"das Krankenhaus","meaning":"병원","gender":"n"},
@@ -59,7 +58,6 @@
   {"word":"aktiv","meaning":"활동적인","gender":""},
   {"word":"regelmäßig","meaning":"규칙적인","gender":""},
   {"word":"positiv","meaning":"긍정적인","gender":""},
-
   {"word":"die Reise","meaning":"여행","gender":"f"},
   {"word":"die Reservierung","meaning":"예약","gender":"f"},
   {"word":"die Fahrkarte","meaning":"승차권","gender":"f"},
