@@ -16,25 +16,24 @@ export default function German90() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/de90.json")
-      .then((res) => res.json())
-      .then((data) => {
-        const converted: Pair[] = data.map((w: any) => ({
-          from: w.word,
-          to: w.meaning,
-        }));
+  fetch("/api/de90")
+    .then((res) => res.json())
+    .then((data) => {
+      const converted: Pair[] = data.map((w: any) => ({
+        from: w.word,
+        to: w.meaning,
+      }));
 
-        setPairs(converted);
+      setPairs(converted);
+      setLeftWords(converted.map((p) => p.from));
+      setRightWords(
+        converted.map((p) => p.to).sort(() => 0.5 - Math.random())
+      );
 
-        setLeftWords(converted.map((p) => p.from));
-
-        setRightWords(
-          converted.map((p) => p.to).sort(() => 0.5 - Math.random())
-        );
-
-        setLoading(false);
-      });
-  }, []);
+      setLoading(false);
+    })
+    .catch((err) => console.error(err));
+}, []);
 
   useEffect(() => {
     if (selectedLeft && selectedRight) {
