@@ -16,8 +16,6 @@ export default function French90() {
   const [loading, setLoading] = useState(true);
   
 useEffect(() => {
-  
-useEffect(() => {
   fetch("/api/fr90")
     .then((res) => {
       console.log("status:", res.status);
