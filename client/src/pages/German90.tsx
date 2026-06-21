@@ -6,7 +6,7 @@ type Pair = {
   to: string;
 };
 
-const STORAGE_KEY = "fr90_progress";
+const STORAGE_KEY = "de90_progress";
 
 export default function French90() {
   const [allWords, setAllWords] = useState<Pair[]>([]);
@@ -46,7 +46,7 @@ export default function French90() {
   }, []);
 
   useEffect(() => {
-    fetch("/api/fr90")
+    fetch("/api/de90")
       .then((res) => res.json())
       .then((data) => {
 
@@ -264,8 +264,7 @@ useEffect(() => {
   return (
     <div style={{ padding: 12 }}>
 
-      <h1>🇫🇷 French 90 Days</h1>
-
+      <h1>🇩🇪 German 90 Days</h1>
       <p>전체 : {allWords.length}</p>
       <p>졸업 : {graduated}</p>
       <p>남음 : {allWords.length - graduated}</p>
@@ -309,8 +308,7 @@ useEffect(() => {
     }}
   >
     <div style={{ flex: 1 }}>
-      <h3>French</h3>
-
+      <h3>German</h3>
       {leftWords.map((word) => (
         <div
           key={word}
