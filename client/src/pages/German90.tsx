@@ -1,58 +1,197 @@
-import React, { useEffect, useState } from "react";
+ㅁimport React, { useEffect, useState } from "react";
 
 type Pair = {
+  id: string;
   from: string;
   to: string;
 };
 
-export default function German90() {
+const STORAGE_KEY = "fr90_progress";
+
+export default function French90() {
+  const [allWords, setAllWords] = useState<Pair[]>([]);
   const [pairs, setPairs] = useState<Pair[]>([]);
+
   const [leftWords, setLeftWords] = useState<string[]>([]);
   const [rightWords, setRightWords] = useState<string[]>([]);
-  const [selectedLeft, setSelectedLeft] = useState<string | null>(null);
-  const [selectedRight, setSelectedRight] = useState<string | null>(null);
-  const [matched, setMatched] = useState<string[]>([]);
-  const [wrong, setWrong] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
+
+  const [selectedLeft, setSelectedLeft] =
+    useState<string | null>(null);
+
+  const [selectedRight, setSelectedRight] =
+    useState<string | null>(null);
+
+  const [matched, setMatched] =
+    useState<string[]>([]);
+
+  const [wrong, setWrong] =
+    useState<string[]>([]);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  const [progress, setProgress] =
+    useState<Record<string, number>>({});
+
+  const [usedWords, setUsedWords] =
+    useState<string[]>([]);
 
   useEffect(() => {
-  fetch("/api/de90")
-    .then((res) => res.json())
-    .then((data) => {
-      const converted: Pair[] = data.map((w: any) => ({
-        from: w.word,
-        to: w.meaning,
-      }));
+    const saved =
+      localStorage.getItem(STORAGE_KEY);
 
-      setPairs(converted);
-      setLeftWords(converted.map((p) => p.from));
-      setRightWords(
-        converted.map((p) => p.to).sort(() => 0.5 - Math.random())
+    if (saved) {
+      setProgress(JSON.parse(saved));
+    }
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/fr90")
+      .then((res) => res.json())
+      .then((data) => {
+
+        const converted: Pair[] =
+
+
+
+
+
+          data.map((w: any) => ({
+            id: w.word,
+            from: w.word,
+            to: w.meaning,
+          }));
+
+        setAllWords(converted);
+      })
+      .catch(console.error);
+
+  }, []);
+
+  const loadNextQuiz = () => {
+
+    const available =
+      allWords.filter(
+        (w) =>
+          (progress[w.id] || 0) < 3 &&
+          !usedWords.includes(w.id)
       );
 
-      setLoading(false);
-    })
-    .catch((err) => console.error(err));
-}, []);
+    if (available.length === 0) {
+      return;
+    }
+
+    const selected =
+      [...available]
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 10);
+
+    setPairs(selected);
+
+    setLeftWords(
+      selected.map((p) => p.from)
+    );
+
+    setRightWords(
+      selected
+        .map((p) => p.to)
+        .sort(() => Math.random() - 0.5)
+    );
+
+    setUsedWords((prev) => [
+      ...prev,
+      ...selected.map((p) => p.id),
+    ]);
+
+    setMatched([]);
+    setWrong([]);
+  };
 
   useEffect(() => {
-    if (selectedLeft && selectedRight) {
-      const correct = pairs.find((p) => p.from === selectedLeft);
 
-      if (correct?.to === selectedRight) {
-        setMatched((prev) => [...prev, selectedLeft, selectedRight]);
+    if (
+      allWords.length > 0 &&
+      pairs.length === 0
+    ) {
+          
+
+
+
+
+      
+      loadNextQuiz();
+      setLoading(false);
+    }
+
+  }, [allWords]);
+
+  useEffect(() => {
+
+    if (
+      selectedLeft &&
+      selectedRight
+    ) {
+
+      const correct =
+        pairs.find(
+          (p) =>
+            p.from === selectedLeft
+        );
+
+      if (
+        correct?.to === selectedRight
+      ) {
+
+        setMatched((prev) => [
+          ...prev,
+          selectedLeft,
+          selectedRight,
+        ]);
+
+        setProgress((prev) => {
+
+          const updated = {
+            ...prev,
+            [correct.id]:
+              (prev[correct.id] || 0) + 1,
+          };
+
+          localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(updated)
+          );
+
+          return updated;
+        });
 
         setTimeout(() => {
+
           setLeftWords((prev) =>
-            prev.filter((w) => w !== selectedLeft)
+            prev.filter(
+              (w) =>
+                w !== selectedLeft
+            )
           );
 
           setRightWords((prev) =>
-            prev.filter((w) => w !== selectedRight)
+            prev.filter(
+              (w) =>
+                w !== selectedRight
+            )
+
+
+
+
           );
+
         }, 500);
+
       } else {
-        setWrong([selectedLeft, selectedRight]);
+
+        setWrong([
+          selectedLeft,
+          selectedRight,
+        ]);
 
         setTimeout(() => {
           setWrong([]);
@@ -60,103 +199,177 @@ export default function German90() {
       }
 
       setTimeout(() => {
+
         setSelectedLeft(null);
+
         setSelectedRight(null);
+
       }, 200);
     }
-  }, [selectedLeft, selectedRight, pairs]);
 
-  if (loading) {
-    return <div style={{ padding: 30 }}>Loading...</div>;
+  }, [
+    selectedLeft,
+    selectedRight,
+    pairs,
+  ]);
+
+useEffect(() => {
+
+  const available =
+    allWords.filter(
+      w =>
+        (progress[w.id] || 0) < 3 &&
+        !usedWords.includes(w.id)
+    );
+
+  if (
+    !loading &&
+    leftWords.length === 0 &&
+    available.length > 0
+  ) {
+
+    setTimeout(() => {
+      loadNextQuiz();
+    }, 500);
+
   }
 
-  const completed = leftWords.length === 0;
+}, [leftWords]);
+
+  
+  if (loading) {
+    return (
+      <div
+        style={{
+          padding: 30,
+        }}
+      >
+        Loading...
+      </div>
+    );
+  }
+
+  const graduated =
+    Object.values(progress)
+      .filter(
+        (v) => v >= 3
+      )
+      .length;
+
+  const completed =
+    graduated >=
+    allWords.length;
+
 
   return (
-    <div style={{ padding: "12px" }}>
-      <h1>🇩🇪 German 90 Days</h1>
+    <div style={{ padding: 12 }}>
 
-      <p>📌 Remaining: {leftWords.length}</p>
+      <h1>🇫🇷 French 90 Days</h1>
+
+      <p>전체 : {allWords.length}</p>
+      <p>졸업 : {graduated}</p>
+      <p>남음 : {allWords.length - graduated}</p>
+
+      <p>
+        현재 문제 :
+        {leftWords.length}
+      </p>
+
+      <button
+        onClick={loadNextQuiz}
+      >
+        Next 10
+      </button>
+
+      <button
+        onClick={() => {
+
+          localStorage.removeItem(
+            STORAGE_KEY
+          );
+
+          window.location.reload();
+
+        }}
+      >
+        Reset Progress
+      </button>
 
       {completed && (
-        <div>
-          <h2 style={{ color: "green" }}>
-            🎉 Completed!
-          </h2>
-
-          <button
-            onClick={() => window.location.reload()}
-            style={{
-              padding: "10px 20px",
-              cursor: "pointer",
-            }}
-          >
-            🔄 Play Again
-          </button>
-        </div>
+        <h2>
+          🎉 All Completed!
+        </h2>
       )}
+{!completed && (
+  <div
+    style={{
+      display: "flex",
+      gap: "10px",
+      marginTop: "20px",
+    }}
+  >
+    <div style={{ flex: 1 }}>
+      <h3>French</h3>
 
-      {!completed && (
+      {leftWords.map((word) => (
         <div
+          key={word}
+          onClick={() => setSelectedLeft(word)}
           style={{
-            display: "flex",
-            gap: "10px",
-            marginTop: "20px",
+            padding: "8px",
+            margin: "4px 0",
+            cursor: "pointer",
+            borderRadius: "8px",
+            background: matched.includes(word)
+              ? "#b6f5c2"
+              : wrong.includes(word)
+              ? "#ffb3b3"
+              : selectedLeft === word
+              ? "#ddd"
+              : "#f5f5f5",
           }}
         >
-          <div style={{ flex: 1 }}>
-            <h3>German</h3>
-
-            {leftWords.map((word) => (
-              <div
-                key={word}
-                onClick={() => setSelectedLeft(word)}
-                style={{
-                  padding: "8px",
-                  margin: "4px 0",
-                  cursor: "pointer",
-                  borderRadius: "8px",
-                  background: matched.includes(word)
-                    ? "#b6f5c2"
-                    : wrong.includes(word)
-                    ? "#ffb3b3"
-                    : selectedLeft === word
-                    ? "#ddd"
-                    : "#f5f5f5",
-                }}
-              >
-                {word}
-              </div>
-            ))}
-          </div>
-
-          <div style={{ flex: 1 }}>
-            <h3>Korean</h3>
-
-            {rightWords.map((word) => (
-              <div
-                key={word}
-                onClick={() => setSelectedRight(word)}
-                style={{
-                  padding: "8px",
-                  margin: "4px 0",
-                  cursor: "pointer",
-                  borderRadius: "8px",
-                  background: matched.includes(word)
-                    ? "#b6f5c2"
-                    : wrong.includes(word)
-                    ? "#ffb3b3"
-                    : selectedRight === word
-                    ? "#ddd"
-                    : "#f5f5f5",
-                }}
-              >
-                {word}
-              </div>
-            ))}
-          </div>
+          {word}
         </div>
-      )}
+      ))}
+    </div>
+
+    <div style={{ flex: 1 }}>
+      <h3>Korean</h3>
+
+      {rightWords.map((word) => (
+        <div
+          key={word}
+          onClick={() => setSelectedRight(word)}
+          style={{
+            padding: "8px",
+            margin: "4px 0",
+            cursor: "pointer",
+            borderRadius: "8px",
+            background: matched.includes(word)
+              ? "#b6f5c2"
+              : wrong.includes(word)
+              ? "#ffb3b3"
+              : selectedRight === word
+              ? "#ddd"
+              : "#f5f5f5",
+          }}
+        >
+          {word}
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
+
     </div>
   );
 }
+
+
+
+
+
+
+        
