@@ -118,19 +118,6 @@ export default function French90() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
       
       loadNextQuiz();
       setLoading(false);
@@ -195,16 +182,6 @@ export default function French90() {
 
 
 
-
-
-
-                        
-
-
-                        
-
-
-
           );
 
         }, 500);
@@ -236,6 +213,30 @@ export default function French90() {
     pairs,
   ]);
 
+useEffect(() => {
+
+  const available =
+    allWords.filter(
+      w =>
+        (progress[w.id] || 0) < 3 &&
+        !usedWords.includes(w.id)
+    );
+
+  if (
+    !loading &&
+    leftWords.length === 0 &&
+    available.length > 0
+  ) {
+
+    setTimeout(() => {
+      loadNextQuiz();
+    }, 500);
+
+  }
+
+}, [leftWords]);
+
+  
   if (loading) {
     return (
       <div
