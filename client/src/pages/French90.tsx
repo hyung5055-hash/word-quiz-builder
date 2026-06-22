@@ -260,6 +260,13 @@ useEffect(() => {
     graduated >=
     allWords.length;
 
+const progressRate =
+  allWords.length > 0
+    ? Math.round(
+        (graduated / allWords.length) * 100
+      )
+    : 0;
+
 
   return (
     <div style={{ padding: 12 }}>
@@ -269,7 +276,7 @@ useEffect(() => {
       <p>전체 : {allWords.length}</p>
       <p>졸업 : {graduated}</p>
       <p>남음 : {allWords.length - graduated}</p>
-
+      <p>📈 진도율 : {progressRate}%</p>
       <p>
         현재 문제 :
         {leftWords.length}
