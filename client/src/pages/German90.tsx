@@ -30,6 +30,9 @@ export default function French90() {
   const [loading, setLoading] =
     useState(true);
 
+  const [showRemaining, setShowRemaining] =
+  useState(false);
+
   const [progress, setProgress] =
     useState<Record<string, number>>({});
 
@@ -260,15 +263,30 @@ useEffect(() => {
     graduated >=
     allWords.length;
 
+  const remainingWords =
+  allWords.filter(
+    (w) =>
+      (progress[w.id] || 0) < 3
+  );
+
+
+const progressRate =
+  allWords.length > 0
+    ? Math.round(
+        (graduated / allWords.length) * 100
+      )
+    : 0;
+
 
   return (
     <div style={{ padding: 12 }}>
 
-      <h1>🇩🇪 German 90 Days</h1>
+     <h1>🇩🇪 German 90 Days</h1>
+
       <p>전체 : {allWords.length}</p>
       <p>졸업 : {graduated}</p>
       <p>남음 : {allWords.length - graduated}</p>
-
+      <p>📈 진도율 : {progressRate}%</p>
       <p>
         현재 문제 :
         {leftWords.length}
@@ -279,6 +297,52 @@ useEffect(() => {
       >
         Next 10
       </button>
+<button
+  onClick={() =>
+    setShowRemaining(
+      !showRemaining
+    )
+  }
+>
+  📚 Remaining Words
+</button>
+
+{showRemaining && (
+
+  <div
+    style={{
+      marginTop: "20px",
+      padding: "10px",
+      border: "1px solid #ddd",
+      borderRadius: "8px",
+      maxHeight: "400px",
+      overflowY: "auto",
+    }}
+  >
+
+    <h3>
+      Remaining Words
+      ({remainingWords.length})
+    </h3>
+
+    {remainingWords.map((w) => (
+
+      <div
+        key={w.id}
+        style={{
+          padding: "4px 0",
+        }}
+      >
+        {w.from}
+      </div>
+
+    ))}
+
+  </div>
+
+)}
+
+
 
       <button
         onClick={() => {
@@ -308,7 +372,8 @@ useEffect(() => {
     }}
   >
     <div style={{ flex: 1 }}>
-      <h3>German</h3>
+       <h3>German</h3>
+
       {leftWords.map((word) => (
         <div
           key={word}
@@ -375,8 +440,7 @@ useEffect(() => {
     ✅
   </button>
 </div>
-
-     
+          
         </div>
       ))}
     </div>
