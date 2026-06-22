@@ -307,6 +307,43 @@ const progressRate =
   📚 Remaining Words
 </button>
 
+{showRemaining && (
+
+  <div
+    style={{
+      marginTop: "20px",
+      padding: "10px",
+      border: "1px solid #ddd",
+      borderRadius: "8px",
+      maxHeight: "400px",
+      overflowY: "auto",
+    }}
+  >
+
+    <h3>
+      Remaining Words
+      ({remainingWords.length})
+    </h3>
+
+    {remainingWords.map((w) => (
+
+      <div
+        key={w.id}
+        style={{
+          padding: "4px 0",
+        }}
+      >
+        {w.from}
+      </div>
+
+    ))}
+
+  </div>
+
+)}
+
+
+
       <button
         onClick={() => {
 
