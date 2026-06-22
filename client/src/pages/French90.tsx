@@ -329,7 +329,55 @@ useEffect(() => {
               : "#f5f5f5",
           }}
         >
-          {word}
+
+<div
+  style={{
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  }}
+>
+  <span>{word}</span>
+
+  <button
+    onClick={(e) => {
+
+      e.stopPropagation();
+
+      const pair =
+        pairs.find(
+          p => p.from === word
+        );
+
+      if (!pair) return;
+
+      setProgress((prev) => {
+
+        const updated = {
+          ...prev,
+          [pair.id]: 3,
+        };
+
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify(updated)
+        );
+
+        return updated;
+      });
+
+      setLeftWords(prev =>
+        prev.filter(
+          w => w !== word
+        )
+      );
+
+    }}
+  >
+    ✅
+  </button>
+</div>
+          
         </div>
       ))}
     </div>
