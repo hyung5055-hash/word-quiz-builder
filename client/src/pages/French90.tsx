@@ -30,6 +30,9 @@ export default function French90() {
   const [loading, setLoading] =
     useState(true);
 
+  const [showRemaining, setShowRemaining] =
+  useState(false);
+
   const [progress, setProgress] =
     useState<Record<string, number>>({});
 
@@ -260,6 +263,13 @@ useEffect(() => {
     graduated >=
     allWords.length;
 
+  const remainingWords =
+  allWords.filter(
+    (w) =>
+      (progress[w.id] || 0) < 3
+  );
+
+
 const progressRate =
   allWords.length > 0
     ? Math.round(
@@ -287,6 +297,15 @@ const progressRate =
       >
         Next 10
       </button>
+<button
+  onClick={() =>
+    setShowRemaining(
+      !showRemaining
+    )
+  }
+>
+  📚 Remaining Words
+</button>
 
       <button
         onClick={() => {
